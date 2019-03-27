@@ -1,0 +1,41 @@
+<configuration xmlns="http://logging.apache.org/log4php/">
+    <!--warn级别以上的错误日志-->
+    <appender name="rollApp" class="LoggerAppenderRollingFile" threshold="WARN">
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s} %level %F %line   %newline    %server{REQUEST_URI}  %server{HTTP_USER_AGENT}%newline%message%newline%newline" />
+        </layout>
+        <param name="file" value="../logs/log-error.log" />
+        <param name="maxFileSize" value="10MB" />
+        <param name="maxBackupIndex" value="5" />
+    </appender>
+
+    <!--所有的日志信息-->
+    <appender name="dailyApp" class="LoggerAppenderDailyFile">
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s} %level %F %line %newline %message  %newline%newline" />
+        </layout>
+        <param name="file" value="../logs/log-%s.log" />
+        <param name="datePattern" value="Y-m-d" />
+    </appender>
+
+    <!--短信发送的日志信息-->
+    <appender name="sms" class="LoggerAppenderDailyFile">
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s,u} %level %F %line %newline %message  %newline%newline" />
+        </layout>
+        <param name="file" value="../logs/log-sms-%s.log" />
+        <param name="datePattern" value="Y-m-d" />
+    </appender>
+
+    <logger name="sms">
+        <level value="TRACE" />
+        <appender_ref ref="sms" />
+    </logger>
+
+
+    <root>
+        <level value="TRACE" />
+        <appender_ref ref="dailyApp" />
+        <appender_ref ref="rollApp" />
+    </root>
+</configuration>
